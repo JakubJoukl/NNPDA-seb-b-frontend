@@ -1,14 +1,13 @@
 package org.vaadin.example.services;
 
-import com.fasterxml.classmate.GenericType;
-import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.vaadin.example.dtos.measuringDevice.AddMeasuringDeviceDto;
+import org.vaadin.example.dtos.measuringDevice.AddMeasuringDeviceSensorDto;
 import org.vaadin.example.dtos.measuringDevice.MeasuringDeviceDto;
+import org.vaadin.example.dtos.measuringDevice.UpdateMeasuringDeviceDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //TODO API calls
@@ -19,6 +18,18 @@ public class MeasuringDeviceService {
     private RestService restService;
 
     public List<MeasuringDeviceDto> getMeasuringDevices() {
-        return (List<MeasuringDeviceDto>) restService.getForObject("measuringDevices/", List.class, true);
+        return restService.getForObject("user/device/getDevices", null, new ParameterizedTypeReference<List<MeasuringDeviceDto>>() {}, true);
+    }
+
+    public MeasuringDeviceDto getMeasuringDeviceByName(String deviceName) {
+        return restService.getForObject("user/device/getDevice/" + deviceName, null, new ParameterizedTypeReference<MeasuringDeviceDto>() {}, true);
+    }
+
+    public void saveNewMeasuringDevice(AddMeasuringDeviceDto measuringDeviceDto) {
+        restService.putForObject("user/device/addDevice", measuringDeviceDto, new ParameterizedTypeReference<Object>() {}, true);
+    }
+
+    public void updateMeasuringDevice(UpdateMeasuringDeviceDto measuringDeviceDto) {
+        restService.postForObject("user/device/updateDevice", measuringDeviceDto, new ParameterizedTypeReference<Object>() {}, true);
     }
 }

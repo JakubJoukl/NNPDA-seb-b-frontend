@@ -3,6 +3,7 @@ package org.vaadin.example.services;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,31 +19,28 @@ public class RestService {
     @Value("${backend.url}")
     private String serverBaseUrl;
 
-    public <T> T postForObject(String serverPath, Object requestParams, Class<T> resultClass, boolean includeJwtToken) {
-        HttpHeaders headers = new HttpHeaders();
-        if(includeJwtToken) addAuthorizationHeader(headers);
-        HttpEntity<Object> entity = new HttpEntity<>(requestParams, headers);
-
-        ResponseEntity<T> response = restTemplate.exchange(
-                serverBaseUrl + serverPath,
-                HttpMethod.POST,
-                entity,
-                resultClass
-        );
-
-        return response.getBody();
+    public <T> T postForObject(String serverPath, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken) {
+        return requestForObject(serverPath, HttpMethod.POST, requestBody, responseType, includeJwtToken);
     }
 
-    public <T> T getForObject(String serverPath, Class<T> resultClass, boolean includeJwtToken, String... requestParams) {
+    public <T> T getForObject(String serverPath, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken, String... requestParams) {
+        return requestForObject(serverPath, HttpMethod.GET, requestBody, responseType, includeJwtToken, requestParams);
+    }
+
+    public <T> T putForObject(String serverPath, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken){
+        return requestForObject(serverPath, HttpMethod.GET, requestBody, responseType, includeJwtToken);
+    }
+
+    private <T> T requestForObject(String serverPath, HttpMethod httpMethod, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken, String... requestParams) {
         HttpHeaders headers = new HttpHeaders();
-        if(includeJwtToken) addAuthorizationHeader(headers);
+        if (includeJwtToken) addAuthorizationHeader(headers);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         ResponseEntity<T> response = restTemplate.exchange(
                 serverBaseUrl + serverPath,
-                HttpMethod.GET,
+                httpMethod,
                 entity,
-                resultClass,
+                responseType,
                 (Object[]) requestParams
         );
 

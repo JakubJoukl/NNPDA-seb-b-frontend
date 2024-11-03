@@ -1,5 +1,6 @@
 package org.vaadin.example.dtos.measuringDevice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MeasuringDeviceDto {
@@ -8,7 +9,7 @@ public class MeasuringDeviceDto {
 
     private String deviceName;
 
-    private List<AddMeasuringDeviceSensorDto> sensors;
+    private List<AddMeasuringDeviceSensorDto> sensors = new ArrayList<>();
 
     private Integer userId;
 

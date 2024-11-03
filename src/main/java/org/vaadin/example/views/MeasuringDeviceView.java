@@ -27,12 +27,15 @@ public class MeasuringDeviceView extends VerticalLayout {
     @Autowired
     public MeasuringDeviceView(MeasuringDeviceService measuringDeviceService){
         this.measuringDeviceService = measuringDeviceService;
+        this.setSizeFull();
 
         FlexLayout flexLayout = new FlexLayout();
         flexLayout.setFlexDirection(FlexLayout.FlexDirection.ROW);
         flexLayout.setSizeFull();
 
         Grid<MeasuringDeviceDto> measuringDeviceDtoGrid = new Grid<>();
+        measuringDeviceDtoGrid.setSizeFull();
+
         measuringDeviceDtoGrid.addColumn(MeasuringDeviceDto::getDeviceName).setHeader("Device name");
         measuringDeviceDtoGrid.addColumn(
                 measuringDeviceDto -> measuringDeviceDto.getSensors().stream()
@@ -41,7 +44,7 @@ public class MeasuringDeviceView extends VerticalLayout {
 
         List<MeasuringDeviceDto> measuringDeviceDtos = measuringDeviceService.getMeasuringDevices();
         measuringDeviceDtoGrid.setItems(measuringDeviceDtos);
-
+        
         measuringDeviceDtoGrid.asSingleSelect().addValueChangeListener(event -> {
             MeasuringDeviceDto selectedItem = event.getValue();
             if (selectedItem != null) {

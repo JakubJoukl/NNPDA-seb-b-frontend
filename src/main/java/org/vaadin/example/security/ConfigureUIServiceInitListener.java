@@ -7,6 +7,7 @@ import com.vaadin.flow.server.VaadinServiceInitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.vaadin.example.views.LoginView;
+import org.vaadin.example.views.MeasuringDeviceView;
 import org.vaadin.example.views.RegisterView;
 import org.vaadin.example.views.ResetPasswordView;
 
@@ -24,13 +25,20 @@ public class ConfigureUIServiceInitListener implements VaadinServiceInitListener
         });
     }
 
-    //TODO opravdu to chci? A co registrace
     private void authenticateNavigation(BeforeEnterEvent event) {
         if ((!LoginView.class.equals(event.getNavigationTarget()) &&
             !RegisterView.class.equals(event.getNavigationTarget()) &&
             !ResetPasswordView.class.equals(event.getNavigationTarget())
         ) && !securityUtils.isUserLoggedIn()) {
             event.rerouteTo(LoginView.class);
+        } else if(securityUtils.isUserLoggedIn() &&
+                (
+                        LoginView.class.equals(event.getNavigationTarget()) ||
+                        RegisterView.class.equals(event.getNavigationTarget()) ||
+                        ResetPasswordView.class.equals(event.getNavigationTarget())
+                ))
+        {
+            event.rerouteTo(MeasuringDeviceView.class);
         }
     }
 }

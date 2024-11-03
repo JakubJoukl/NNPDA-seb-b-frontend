@@ -28,13 +28,13 @@ public class RestService {
     }
 
     public <T> T putForObject(String serverPath, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken){
-        return requestForObject(serverPath, HttpMethod.GET, requestBody, responseType, includeJwtToken);
+        return requestForObject(serverPath, HttpMethod.PUT, requestBody, responseType, includeJwtToken);
     }
 
     private <T> T requestForObject(String serverPath, HttpMethod httpMethod, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken, String... requestParams) {
         HttpHeaders headers = new HttpHeaders();
         if (includeJwtToken) addAuthorizationHeader(headers);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+        HttpEntity<Object> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<T> response = restTemplate.exchange(
                 serverBaseUrl + serverPath,

@@ -1,6 +1,7 @@
 package org.vaadin.example.components;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
@@ -30,6 +31,8 @@ public class MeasuringDeviceForm extends VerticalLayout {
 
     public MeasuringDeviceForm(MeasuringDeviceDto measuringDeviceDto, MeasuringDeviceService measuringDeviceService) {
         this.measuringDeviceService = measuringDeviceService;
+        setSizeFull();
+        formLayout.setSizeFull();
 
         if(measuringDeviceDto == null) {
             measuringDeviceDto = new MeasuringDeviceDto();
@@ -38,11 +41,12 @@ public class MeasuringDeviceForm extends VerticalLayout {
             oldDeviceName = measuringDeviceDto.getDeviceName();
         }
 
-        H2 title = new H2(isNew? "Add measuring device" : "Edit measuring device");
+        H2 title = new H2(isNew? "Add measuring device" : "Edit measuring device " + oldDeviceName);
+
+        formLayout.add(deviceNameField, 2);
 
         if(!isNew) {
             deviceNameField.setValue(measuringDeviceDto.getDeviceName());
-            deviceNameField.setReadOnly(true);
             measuringDeviceDto.getSensors().forEach(addMeasuringDeviceSensorDto -> addSensorField(addMeasuringDeviceSensorDto.getSensorName()));
         }
 
@@ -67,6 +71,9 @@ public class MeasuringDeviceForm extends VerticalLayout {
             Notification.show("Sensor removed");
         });
 
+        removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
+        if(sensorName == null) Notification.show("Sensor added");
         formLayout.add(sensorField, removeButton);
     }
 

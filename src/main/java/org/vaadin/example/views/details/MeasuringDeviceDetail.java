@@ -15,10 +15,6 @@ import org.vaadin.example.dtos.measuringDevice.MeasuringDeviceDto;
 import org.vaadin.example.services.MeasuringDeviceService;
 import org.vaadin.example.views.MainLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Route(value = "user/measuringDevice/", layout = MainLayout.class)
 @PageTitle("Measuring device")
 @AnonymousAllowed
@@ -30,6 +26,7 @@ public class MeasuringDeviceDetail extends FlexLayout implements HasUrlParameter
 
     public MeasuringDeviceDetail(MeasuringDeviceService measuringDeviceService) {
         this.measuringDeviceService = measuringDeviceService;
+        setSizeFull();
         setFlexDirection(FlexDirection.ROW);
     }
 
@@ -41,11 +38,6 @@ public class MeasuringDeviceDetail extends FlexLayout implements HasUrlParameter
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         MeasuringDeviceDto measuringDeviceDto = measuringDeviceService.getMeasuringDeviceByName(deviceName);
-        FlexLayout layout = new FlexLayout();
-        layout.setFlexDirection(FlexDirection.COLUMN);
-
-        FormLayout deviceEditLayout = new FormLayout();
-        deviceEditLayout.add(new MeasuringDeviceForm(measuringDeviceDto, measuringDeviceService));
-        add(layout);
+        add(new MeasuringDeviceForm(measuringDeviceDto, measuringDeviceService));
     }
 }

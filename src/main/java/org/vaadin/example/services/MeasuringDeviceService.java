@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.vaadin.example.dtos.measuringDevice.AddMeasuringDeviceDto;
-import org.vaadin.example.dtos.measuringDevice.AddMeasuringDeviceSensorDto;
 import org.vaadin.example.dtos.measuringDevice.MeasuringDeviceDto;
 import org.vaadin.example.dtos.measuringDevice.UpdateMeasuringDeviceDto;
 
@@ -26,10 +25,10 @@ public class MeasuringDeviceService {
     }
 
     public void saveNewMeasuringDevice(AddMeasuringDeviceDto measuringDeviceDto) {
-        restService.putForObject("user/device/addDevice", measuringDeviceDto, new ParameterizedTypeReference<Object>() {}, true);
+        restService.postForObject("user/device/addDevice", measuringDeviceDto, new ParameterizedTypeReference<Void>() {}, true);
     }
 
     public void updateMeasuringDevice(UpdateMeasuringDeviceDto measuringDeviceDto) {
-        restService.postForObject("user/device/updateDevice", measuringDeviceDto, new ParameterizedTypeReference<Object>() {}, true);
+        restService.putForObject("user/device/updateDevice", measuringDeviceDto, new ParameterizedTypeReference<Void>() {}, true);
     }
 }

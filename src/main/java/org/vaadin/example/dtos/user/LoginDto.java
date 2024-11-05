@@ -1,10 +1,10 @@
 package org.vaadin.example.dtos.user;
 
-public class LoginRequest {
+public class LoginDto {
     private String username;
     private String password;
 
-    public LoginRequest(String username, String password) {
+    public LoginDto(String username, String password) {
         this.username = username;
         this.password = password;
     }

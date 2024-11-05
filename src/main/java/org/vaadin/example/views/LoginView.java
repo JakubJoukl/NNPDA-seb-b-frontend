@@ -13,13 +13,15 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.example.dtos.user.LoginDto;
 import org.vaadin.example.services.UserService;
 
-@Route("user/login")
+@Route(value = "user/login", layout = MainLayout.class)
 @PageTitle("Login")
 @AnonymousAllowed
 public class LoginView extends FlexLayout {
 
+    //TODO melo byt jako samostatna komponenta...
     private TextField usernameField = new TextField("Username");
     private PasswordField passwordField = new PasswordField("Password");
     private Button loginButton = new Button("Login");
@@ -45,7 +47,8 @@ public class LoginView extends FlexLayout {
     }
 
     private void login(String username, String password) {
-        String token = userService.login(username, password);
+        LoginDto loginDto = new LoginDto(username, password);
+        String token = userService.login(loginDto);
         if(token != null) {
             VaadinSession.getCurrent().setAttribute("jwt", token);
             Notification.show("Přihlášení bylo úspěšné, nice");

@@ -57,7 +57,7 @@ public class MainLayout extends Composite<VerticalLayout> implements HasComponen
 
         add(mainContent);
 
-        H1 footer = new H1("Zde si mohu přidat footer, asi ale nechci?");
+        H1 footer = new H1("Footer");
         add(footer);
 
         getContent().setFlexGrow(1, mainContent);
@@ -76,7 +76,7 @@ public class MainLayout extends Composite<VerticalLayout> implements HasComponen
         menuBar.removeAll();
         if(securityService.isUserLoggedIn()) {
             menuBar.add(new RouterLink("Measuring devices", MeasuringDeviceView.class));
-            menuBar.add(new RouterLink("Sensors", SensorView.class));
+            //menuBar.add(new RouterLink("Sensors", SensorView.class));
             menuBar.add(new RouterLink("User", UserView.class));
 
             Button logout = new Button("Logout");

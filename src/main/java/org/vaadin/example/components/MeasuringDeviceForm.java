@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,6 +16,7 @@ import org.vaadin.example.views.MeasuringDeviceView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MeasuringDeviceForm extends VerticalLayout {
 
@@ -49,7 +51,7 @@ public class MeasuringDeviceForm extends VerticalLayout {
 
         if(!isNew) {
             deviceNameField.setValue(measuringDeviceDto.getDeviceName());
-            measuringDeviceDto.getSensors().forEach(addMeasuringDeviceSensorDto -> addSensorField(addMeasuringDeviceSensorDto.getSensorName()));
+            measuringDeviceDto.getSensors().forEach(addMeasuringDeviceSensorDto -> addSensorField(addMeasuringDeviceSensorDto));
         }
 
         FlexLayout deviceStateButtons = getButtonsLayout();
@@ -85,21 +87,33 @@ public class MeasuringDeviceForm extends VerticalLayout {
         addSensorField(null);
     }
 
-    private void addSensorField(String sensorName) {
+    private void addSensorField(AddMeasuringDeviceSensorDto senzor) {
         TextField sensorField = new TextField("Sensor name");
-        if(sensorName != null) sensorField.setValue(sensorName);
+        if(senzor != null) sensorField.setValue(senzor.getSensorName());
         sensorFields.add(sensorField);
 
-        Button removeButton = new Button("Remove sensor", event -> {
+        Button removeButton = new Button("Remove sensor");
+
+        removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
+        if(senzor == null) Notification.show("Sensor added");
+        formLayout.add(sensorField, removeButton);
+
+        Paragraph measuredDataParagraph = new Paragraph();
+        boolean senzorHasMeasuredValues = senzor != null && senzor.getMeasuredValues() != null && !senzor.getMeasuredValues().isEmpty();
+        if(senzorHasMeasuredValues) {
+            measuredDataParagraph.setText("Measured data: " + senzor.getMeasuredValues().stream().map(MeasuredValueDto::toString).collect(Collectors.joining(", ")));
+            formLayout.add(measuredDataParagraph, 2);
+        }
+
+        removeButton.addClickListener(event -> {
+            if(senzorHasMeasuredValues) {
+                formLayout.remove(measuredDataParagraph);
+            }
             formLayout.remove(sensorField);
             formLayout.remove(event.getSource());
             Notification.show("Sensor removed");
         });
-
-        removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-
-        if(sensorName == null) Notification.show("Sensor added");
-        formLayout.add(sensorField, removeButton);
     }
 
     private void saveMeasuringDevice() {

@@ -1,5 +1,7 @@
 package org.vaadin.example.dtos.measuringDevice;
 
+import org.vaadin.example.utils.Utils;
+
 import java.time.Instant;
 
 public class MeasuredValueDto {
@@ -49,5 +51,10 @@ public class MeasuredValueDto {
 
     public void setSensorId(Integer sensorId) {
         this.sensorId = sensorId;
+    }
+
+    @Override
+    public String toString(){
+        return Utils.formatDate(measuredOn) + " measured value " + measuredValue;
     }
 }

@@ -1,7 +1,11 @@
 package org.vaadin.example.dtos.measuringDevice;
 
+import java.util.List;
+
 public class AddMeasuringDeviceSensorDto {
     private String sensorName;
+
+    private List<MeasuredValueDto> measuredValues;
 
     public AddMeasuringDeviceSensorDto(String sensorName) {
         this.sensorName = sensorName;

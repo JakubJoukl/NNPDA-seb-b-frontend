@@ -1,6 +1,7 @@
 package org.vaadin.example.views;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 public class MeasuringDeviceView extends VerticalLayout {
 
     private MeasuringDeviceService measuringDeviceService;
+    private Grid<MeasuringDeviceDto> measuringDeviceDtoGrid = new Grid<>();
+    private Button addMeasuringDeviceButton = new Button("Add measuring device");
 
     @Autowired
     public MeasuringDeviceView(MeasuringDeviceService measuringDeviceService){
@@ -30,10 +33,9 @@ public class MeasuringDeviceView extends VerticalLayout {
         this.setSizeFull();
 
         FlexLayout flexLayout = new FlexLayout();
-        flexLayout.setFlexDirection(FlexLayout.FlexDirection.ROW);
+        flexLayout.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
         flexLayout.setSizeFull();
 
-        Grid<MeasuringDeviceDto> measuringDeviceDtoGrid = new Grid<>();
         measuringDeviceDtoGrid.setSizeFull();
 
         measuringDeviceDtoGrid.addColumn(MeasuringDeviceDto::getDeviceName).setHeader("Device name");
@@ -52,7 +54,9 @@ public class MeasuringDeviceView extends VerticalLayout {
             }
         });
 
-        flexLayout.add(measuringDeviceDtoGrid);
+        addMeasuringDeviceButton.addClickListener(event -> UI.getCurrent().navigate(MeasuringDeviceDetail.class));
+
+        flexLayout.add(measuringDeviceDtoGrid, addMeasuringDeviceButton);
 
         add(flexLayout);
     }

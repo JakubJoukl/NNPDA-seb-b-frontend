@@ -33,7 +33,10 @@ public class MeasuringDeviceDetail extends FlexLayout implements HasUrlParameter
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        MeasuringDeviceDto measuringDeviceDto = measuringDeviceService.getMeasuringDeviceByName(deviceName);
+        MeasuringDeviceDto measuringDeviceDto = null;
+        if(deviceName != null) {
+            measuringDeviceDto = measuringDeviceService.getMeasuringDeviceByName(deviceName);
+        }
         add(new MeasuringDeviceForm(measuringDeviceDto, measuringDeviceService));
     }
 }

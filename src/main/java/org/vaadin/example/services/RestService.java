@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.vaadin.example.dtos.measuringDevice.DeleteMeasuringDeviceDto;
 
 @Service
 public class RestService {
@@ -29,6 +30,11 @@ public class RestService {
 
     public <T> T putForObject(String serverPath, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken){
         return requestForObject(serverPath, HttpMethod.PUT, requestBody, responseType, includeJwtToken);
+    }
+
+
+    public <T> T deleteForObject(String serverPath, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken) {
+        return requestForObject(serverPath, HttpMethod.DELETE, requestBody, responseType, includeJwtToken);
     }
 
     private <T> T requestForObject(String serverPath, HttpMethod httpMethod, Object requestBody, ParameterizedTypeReference<T> responseType, boolean includeJwtToken, String... requestParams) {
